@@ -239,6 +239,13 @@ abstract class AbstractMethod extends \Magento\Payment\Model\Method\AbstractMeth
                         throw new Exception($generalErrorMessage, 1);
                     }
                     if ($data['cc_type'] != 'savedcard') {
+                        if (isset($data['cse_enabled']) && $data['cse_enabled']) {
+                            // Client-Side Encryption requested
+                            if (!isset($data['encryptedData'])){
+                                throw new Exception(__('CSE Requested, but no encrypted data sent. Please Refresh and check again'), 1);
+                            }
+                            return;
+                        }
                         if (!isset($data['cc_exp_year'])) {
                             throw new Exception(__("Invalid Expiry Year. Please Refresh and check again"), 1);
                         }

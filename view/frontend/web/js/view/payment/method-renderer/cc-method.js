@@ -304,7 +304,20 @@ define(
              * @override
              */
             getData: function () {
-                
+                if (this.intigrationmode === 'direct' && this.isClientSideEncryptionEnabled()) {
+                    return {
+                        'method': "worldpay_cc",
+                        'additional_data': {
+                            'cc_type': this.getselectedCCType('payment[cc_type]'),
+                            'save_my_card': this.saveMyCard,
+                            'cse_enabled': this.isClientSideEncryptionEnabled(),
+                            'encryptedData': this.cseData,
+                            'tokenCode': this.paymentToken,
+                            'saved_cc_cid': $('.saved-cvv-number').val(),
+                            'isSavedCardPayment': this.isSavedCardPayment
+                        }
+                    };
+                }
                 return {
                     'method': "worldpay_cc",
                     'additional_data': {
